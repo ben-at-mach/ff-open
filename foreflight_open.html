@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Open route in ForeFlight</title>
+<style>
+  body { font: 18px -apple-system, system-ui, sans-serif; margin: 2rem 1.2rem; max-width: 34rem; }
+  a.btn { display: inline-block; padding: .9rem 1.4rem; background: #0a5fd8; color: #fff; border-radius: .6rem; text-decoration: none; font-weight: 600; }
+  code { word-break: break-all; font-size: 14px; }
+  #err { color: #b00020; }
+</style>
+</head>
+<body>
+<h2>Open route in ForeFlight</h2>
+<p id="msg">Opening ForeFlight...</p>
+<p><a id="go" class="btn" href="#">Open in ForeFlight</a></p>
+<p id="err"></p>
+<p><code id="route"></code></p>
+<script>
+// The route is in the URL fragment (#...), which the browser never sends to the server, so this page holds no route data.
+// Allowed characters: ICAO lat/lon points with an altitude suffix and a speed, as written by foreflight_route.py.
+var route = decodeURIComponent(location.hash.slice(1)).replace(/\+/g, " ").trim();
+if (!/^[0-9NSEWF\/ .kts]{10,2000}$/.test(route)) {
+  document.getElementById("msg").textContent = "";
+  document.getElementById("err").textContent = route ? "This link does not look like a route." : "No route in this link.";
+  document.getElementById("go").style.display = "none";
+} else {
+  var url = "foreflightmobile://maps/search?q=" + route.replace(/ /g, "+");
+  document.getElementById("go").href = url;
+  document.getElementById("route").textContent = route;
+  setTimeout(function () { location.href = url; }, 300);
+}
+</script>
+</body>
+</html>
