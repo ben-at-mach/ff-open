@@ -20,9 +20,10 @@
 <p><code id="route"></code></p>
 <script>
 // The route is in the URL fragment (#...), which the browser never sends to the server, so this page holds no route data.
-// Allowed characters: ICAO lat/lon points with an altitude suffix, then a speed (kts) and a plan altitude (ft), as written by foreflight_route.py.
+// Allowed characters: letters, digits, '/', '.' and spaces: an optional airport identifier, ICAO lat/lon points with an altitude suffix, then a speed (kts) and a plan altitude (ft), as written by foreflight_route.py.
+// The link always starts with foreflightmobile://maps/search?q=, so the text cannot change the scheme.
 var route = decodeURIComponent(location.hash.slice(1)).replace(/\+/g, " ").trim();
-if (!/^[0-9NSEWFfkts\/ .]{10,2000}$/.test(route)) {
+if (!/^[0-9A-Za-z\/ .]{10,2000}$/.test(route)) {
   document.getElementById("msg").textContent = "";
   document.getElementById("err").textContent = route ? "This link does not look like a route." : "No route in this link.";
   document.getElementById("go").style.display = "none";
